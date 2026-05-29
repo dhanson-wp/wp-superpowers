@@ -35,6 +35,10 @@ function parseArgs(argv) {
   return args;
 }
 
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
 function listSkills() {
   return fs
     .readdirSync(skillsRoot, { withFileTypes: true })
@@ -59,6 +63,11 @@ function targetDir(target, destination, isGlobal) {
 }
 
 const args = parseArgs(process.argv.slice(2));
+assert(!(args.global && args.dest), "--global cannot be combined with --dest");
+assert(!(args.list && (args.global || args.dest || args.targets || args.skills || args.dryRun)), "--list cannot be combined with install options");
+assert(!args.targets || args.targets.length > 0, "--targets must include at least one target");
+assert(!args.skills || args.skills.length > 0, "--skills must include at least one skill");
+
 const allSkills = listSkills();
 
 if (args.list) {
@@ -72,6 +81,10 @@ for (const skill of selected) {
 }
 
 const targets = args.targets ?? ["codex", "claude"];
+for (const target of targets) {
+  targetDir(target, repoRoot, Boolean(args.global));
+}
+
 const destination = args.global ? null : path.resolve(repoRoot, args.dest ?? ".");
 
 for (const target of targets) {

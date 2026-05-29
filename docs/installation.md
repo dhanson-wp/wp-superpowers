@@ -72,6 +72,8 @@ Then run:
 composer install
 ```
 
+Composer `paths` must be project-relative. Absolute paths and paths that escape the project directory are rejected.
+
 ## Generated Skill Folders
 
 The installer copies skills into assistant-specific folders. In most consuming projects, those folders are generated local tooling and should not be committed unless the project intentionally vendors its agent skills.

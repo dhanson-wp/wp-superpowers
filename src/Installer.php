@@ -56,9 +56,63 @@ final class Installer
 		$paths  = is_array($paths) ? $paths : [ $paths ];
 
 		return array_values(array_map(
-			static fn(string $path): string => rtrim($projectDir . '/' . ltrim($path, '/'), '/'),
+			static function (string $path) use ($projectDir): string {
+				return self::resolveProjectPath($projectDir, $path);
+			},
 			$paths
 		));
+	}
+
+	private static function resolveProjectPath(string $projectDir, string $path): string
+	{
+		if ('' === trim($path)) {
+			throw new RuntimeException('wp-superpowers: destination path cannot be empty.');
+		}
+
+		if (self::isAbsolutePath($path)) {
+			throw new RuntimeException('wp-superpowers: destination path must be project-relative: ' . $path);
+		}
+
+		$projectDir = self::normalizePath($projectDir);
+		$resolved   = self::normalizePath($projectDir . '/' . $path);
+
+		if ($resolved === $projectDir) {
+			throw new RuntimeException('wp-superpowers: destination path must be a project subdirectory: ' . $path);
+		}
+
+		if (0 !== strpos($resolved, $projectDir . '/')) {
+			throw new RuntimeException('wp-superpowers: destination path escapes the project directory: ' . $path);
+		}
+
+		return $resolved;
+	}
+
+	private static function isAbsolutePath(string $path): bool
+	{
+		return 1 === preg_match('/^(?:[A-Za-z]:[\/\\\\]|[\/\\\\])/', $path);
+	}
+
+	private static function normalizePath(string $path): string
+	{
+		$path  = str_replace('\\', '/', $path);
+		$parts = [];
+
+		foreach (explode('/', $path) as $part) {
+			if ('' === $part || '.' === $part) {
+				continue;
+			}
+
+			if ('..' === $part) {
+				array_pop($parts);
+				continue;
+			}
+
+			$parts[] = $part;
+		}
+
+		$prefix = 0 === strpos($path, '/') ? '/' : '';
+
+		return rtrim($prefix . implode('/', $parts), '/') ?: $prefix;
 	}
 
 	private static function installTo(string $source, string $destination, object $io): void
@@ -69,7 +123,9 @@ final class Installer
 
 		$skills = array_filter(
 			scandir($source) ?: [],
-			static fn(string $entry): bool => $entry !== '.' && $entry !== '..' && is_dir($source . '/' . $entry)
+			static function (string $entry) use ($source): bool {
+				return $entry !== '.' && $entry !== '..' && is_dir($source . '/' . $entry);
+			}
 		);
 
 		foreach ($skills as $skill) {
@@ -85,13 +141,19 @@ final class Installer
 
 	private static function copyDirectory(string $source, string $destination): void
 	{
+		if (is_link($source)) {
+			throw new RuntimeException('wp-superpowers: refusing to copy symlinked source directory: ' . $source);
+		}
+
 		if (! is_dir($destination) && ! mkdir($destination, 0755, true)) {
 			throw new RuntimeException('wp-superpowers: failed to create directory: ' . $destination);
 		}
 
 		$entries = array_filter(
 			scandir($source) ?: [],
-			static fn(string $entry): bool => $entry !== '.' && $entry !== '..'
+			static function (string $entry): bool {
+				return $entry !== '.' && $entry !== '..';
+			}
 		);
 
 		foreach ($entries as $entry) {
@@ -100,8 +162,10 @@ final class Installer
 
 			if (is_dir($sourcePath)) {
 				self::copyDirectory($sourcePath, $destinationPath);
-			} else {
-				copy($sourcePath, $destinationPath);
+			} elseif (is_link($sourcePath)) {
+				throw new RuntimeException('wp-superpowers: refusing to copy symlinked source file: ' . $sourcePath);
+			} elseif (! copy($sourcePath, $destinationPath)) {
+				throw new RuntimeException('wp-superpowers: failed to copy file: ' . $sourcePath);
 			}
 		}
 	}
@@ -112,9 +176,19 @@ final class Installer
 			return;
 		}
 
+		if (is_link($path)) {
+			if (! unlink($path)) {
+				throw new RuntimeException('wp-superpowers: failed to remove symlink: ' . $path);
+			}
+
+			return;
+		}
+
 		$entries = array_filter(
 			scandir($path) ?: [],
-			static fn(string $entry): bool => $entry !== '.' && $entry !== '..'
+			static function (string $entry): bool {
+				return $entry !== '.' && $entry !== '..';
+			}
 		);
 
 		foreach ($entries as $entry) {
@@ -122,11 +196,13 @@ final class Installer
 
 			if (is_dir($entryPath)) {
 				self::removeDirectory($entryPath);
-			} else {
-				unlink($entryPath);
+			} elseif (! unlink($entryPath)) {
+				throw new RuntimeException('wp-superpowers: failed to remove file: ' . $entryPath);
 			}
 		}
 
-		rmdir($path);
+		if (! rmdir($path)) {
+			throw new RuntimeException('wp-superpowers: failed to remove directory: ' . $path);
+		}
 	}
 }

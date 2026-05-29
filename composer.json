@@ -4,7 +4,7 @@
 	"description": "Add-on WordPress agent skills for custom editors, admin UI, plugin quality, block markup, Playground, and Interactivity API workflows.",
 	"license": "GPL-2.0-or-later",
 	"require": {
-		"php": ">=8.1"
+		"php": ">=7.2.24"
 	},
 	"autoload": {
 		"psr-4": {

@@ -29,6 +29,18 @@ function validateSkillName(name) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name) ? null : "Skill name contains invalid characters";
 }
 
+function validateDescription(description) {
+  if (!description || typeof description !== "string") return "Missing description";
+  if (description.length > 240) return `Description exceeds 240 chars (${description.length})`;
+  if (/[\r\n]/.test(description)) return "Description cannot contain line breaks";
+  if (/[\u0000-\u001f\u007f]/.test(description)) return "Description contains invalid control characters";
+  return null;
+}
+
+function quoteYamlString(value) {
+  return JSON.stringify(value);
+}
+
 const [, , skillName, description] = process.argv;
 if (!skillName || !description) {
   usage();
@@ -37,6 +49,8 @@ if (!skillName || !description) {
 
 const nameError = validateSkillName(skillName);
 assert(!nameError, nameError);
+const descriptionError = validateDescription(description);
+assert(!descriptionError, descriptionError);
 
 const repoRoot = process.cwd();
 const skillDir = path.join(repoRoot, "skills", skillName);
@@ -44,7 +58,7 @@ const referencesDir = path.join(skillDir, "references");
 assert(!fs.existsSync(skillDir), `Skill already exists: ${path.relative(repoRoot, skillDir)}`);
 fs.mkdirSync(referencesDir, { recursive: true });
 
-const skillMd = `---\nname: ${skillName}\ndescription: "${description}"\ncompatibility: "Targets WordPress 6.9+ (PHP 7.2.24+). Filesystem-based agent with bash + node."\n---\n\n# ${skillName}\n\n## When to use\n\n## Inputs required\n\n## Procedure\n\n1. Inspect the target project.\n2. Read \`references/guide.md\`.\n3. Implement using WordPress-native APIs.\n4. Run verification.\n\n## Verification\n\n## Failure modes / debugging\n\n## Escalation\n`;
+const skillMd = `---\nname: ${skillName}\ndescription: ${quoteYamlString(description)}\ncompatibility: "Targets WordPress 6.9+ (PHP 7.2.24+). Filesystem-based agent with bash + node."\n---\n\n# ${skillName}\n\n## When to use\n\n## Inputs required\n\n## Procedure\n\n1. Inspect the target project.\n2. Read \`references/guide.md\`.\n3. Implement using WordPress-native APIs.\n4. Run verification.\n\n## Verification\n\n## Failure modes / debugging\n\n## Escalation\n`;
 fs.writeFileSync(path.join(skillDir, "SKILL.md"), skillMd, "utf8");
 fs.writeFileSync(path.join(referencesDir, "guide.md"), `# ${skillName} Guide\n`, "utf8");
 
