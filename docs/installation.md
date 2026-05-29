@@ -2,6 +2,12 @@
 
 WP Superpowers can be used directly from a clone, installed into a WordPress project, or copied into global assistant skill folders.
 
+## Requirements
+
+- Git
+- Node.js for the install and validation scripts
+- Composer and PHP 7.2.24+ for Composer-managed installs
+
 ## Clone And Inspect
 
 ```bash
@@ -19,6 +25,15 @@ Install all add-on skills into a project for Codex and Claude:
 node shared/scripts/skillpack-install.mjs --dest=../your-wp-project --targets=codex,claude
 ```
 
+Default project-local targets:
+
+| Target | Destination |
+| --- | --- |
+| `codex` | `.codex/skills` |
+| `claude` | `.claude/skills` |
+| `cursor` | `.cursor/skills` |
+| `vscode` / `copilot` | `.github/skills` |
+
 Install only selected skills:
 
 ```bash
@@ -33,9 +48,13 @@ Install selected skills into the current user's global assistant skill folder:
 node shared/scripts/skillpack-install.mjs --global --targets=codex --skills=wp-custom-block-editor,wp-plugin-quality-gate
 ```
 
+Global installs currently support `codex`, `claude`, and `cursor`.
+
 ## Composer-Managed Projects
 
 Add the package as a VCS repository in a WordPress project's `composer.json`:
+
+Until this package is published to Packagist, the `repositories` block is required so Composer can install it from GitHub.
 
 ```json
 {
@@ -50,11 +69,12 @@ Add the package as a VCS repository in a WordPress project's `composer.json`:
 	},
 	"scripts": {
 		"post-install-cmd": [
-			"WPSuperpowers\\Installer::install"
+			"@wp-superpowers"
 		],
 		"post-update-cmd": [
-			"WPSuperpowers\\Installer::install"
-		]
+			"@wp-superpowers"
+		],
+		"wp-superpowers": "WPSuperpowers\\Installer::install"
 	},
 	"extra": {
 		"wp-superpowers": {
@@ -73,6 +93,8 @@ composer install
 ```
 
 Composer `paths` must be project-relative. Absolute paths and paths that escape the project directory are rejected.
+
+After install, restart or reload your agent so it can discover the copied skills.
 
 ## Generated Skill Folders
 

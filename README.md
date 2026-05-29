@@ -28,6 +28,12 @@ Source still wins. WP Superpowers supplies the extra operating judgment.
 
 ## How To Use
 
+Requirements:
+
+- Git
+- Node.js for the install and validation scripts
+- Composer and PHP 7.2.24+ for Composer-managed installs
+
 Clone and inspect:
 
 ```bash
@@ -49,7 +55,47 @@ Install selected skills globally:
 node shared/scripts/skillpack-install.mjs --global --targets=codex --skills=wp-custom-block-editor,wp-plugin-quality-gate
 ```
 
-For Composer installs, generated skill folders, and project-local setup details, see [Installation](docs/installation.md).
+Install into a Composer-managed WordPress project:
+
+Until this package is published to Packagist, keep the `repositories` block so Composer can install it from GitHub.
+
+```json
+{
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/dhanson-wp/wp-superpowers"
+		}
+	],
+	"scripts": {
+		"post-install-cmd": [
+			"@wp-superpowers"
+		],
+		"post-update-cmd": [
+			"@wp-superpowers"
+		],
+		"wp-superpowers": "WPSuperpowers\\Installer::install"
+	},
+	"require-dev": {
+		"dhanson-wp/wp-superpowers": "dev-main"
+	},
+	"extra": {
+		"wp-superpowers": {
+			"skills": {
+				"paths": [ ".claude/skills", ".codex/skills" ]
+			}
+		}
+	}
+}
+```
+
+Then run:
+
+```bash
+composer install
+```
+
+Restart or reload your agent after installing so it can discover the copied skills. For generated skill folders, path safety, and project-local setup details, see [Installation](docs/installation.md).
 
 For an agent:
 
