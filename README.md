@@ -1,4 +1,12 @@
-# WP Superpowers
+<p align="center">
+	<img src="assets/wp-superpowers-header.png" alt="WP Superpowers header graphic showing WordPress editor blocks, developer tools, and verification workflows" width="100%">
+</p>
+
+<h1 align="center">WP Superpowers</h1>
+
+<p align="center">
+	Add-on skill bundles for AI-assisted WordPress development.
+</p>
 
 WP Superpowers is an add-on pack for established WordPress agent skills.
 
@@ -110,6 +118,7 @@ Inspect the target project, implement with WordPress-native APIs, run the verifi
 ## Repository Map
 
 - `skills/` - portable skill bundles, each with `SKILL.md`, `references/`, and optional `scripts/`.
+- `assets/` - public README and sharing artwork.
 - `docs/` - installation notes, default-skill relationship, and architecture guidance.
 - `eval/scenarios/` - prompt-style scenarios that describe expected agent behavior.
 - `shared/scripts/` - helper scripts for scaffolding, installing, and future packaging.
