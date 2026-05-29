@@ -34,7 +34,7 @@ Clone and inspect:
 git clone https://github.com/dhanson-wp/wp-superpowers.git
 cd wp-superpowers
 ls skills
-node eval/harness/run.mjs
+npm run validate
 ```
 
 Install into a project with Node:
@@ -49,42 +49,7 @@ Install selected skills globally:
 node shared/scripts/skillpack-install.mjs --global --targets=codex --skills=wp-custom-block-editor,wp-plugin-quality-gate
 ```
 
-Install into a Composer-managed WordPress project:
-
-```json
-{
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/dhanson-wp/wp-superpowers"
-		}
-	],
-	"require-dev": {
-		"dhanson-wp/wp-superpowers": "dev-main"
-	},
-	"scripts": {
-		"post-install-cmd": [
-			"WPSuperpowers\\Installer::install"
-		],
-		"post-update-cmd": [
-			"WPSuperpowers\\Installer::install"
-		]
-	},
-	"extra": {
-		"wp-superpowers": {
-			"skills": {
-				"paths": [ ".claude/skills", ".codex/skills" ]
-			}
-		}
-	}
-}
-```
-
-Then run:
-
-```bash
-composer install
-```
+For Composer installs, generated skill folders, and project-local setup details, see [Installation](docs/installation.md).
 
 For an agent:
 
@@ -99,6 +64,7 @@ Inspect the target project, implement with WordPress-native APIs, run the verifi
 ## Repository Map
 
 - `skills/` - portable skill bundles, each with `SKILL.md`, `references/`, and optional `scripts/`.
+- `docs/` - installation notes, default-skill relationship, and architecture guidance.
 - `eval/scenarios/` - prompt-style scenarios that describe expected agent behavior.
 - `shared/scripts/` - helper scripts for scaffolding, installing, and future packaging.
 - `examples/` - small public-safe reference implementations.
@@ -116,17 +82,6 @@ Inspect the target project, implement with WordPress-native APIs, run the verifi
 | `wp-playground-verification` | `wp-playground` | Disposable proof loops with activation, target URL, console, interaction, reload, and screenshot checks |
 | `wp-interactivity-practice-loop` | `wp-interactivity-api`, `wp-playground` | Small faithful Interactivity API reps plus one useful variation and frontend verification |
 
-## Gitignore
-
-When installed into a project, these skill folders are generated copies. Add the installed add-ons to the consuming project's `.gitignore` unless you intentionally want to commit them:
-
-```gitignore
-.claude/skills/wp-*/
-.codex/skills/wp-*/
-.cursor/skills/wp-*/
-.github/skills/wp-*/
-```
-
 ## License
 
-Code examples are intended to be GPL-compatible for WordPress use. See `LICENSE`.
+WP Superpowers is licensed under GPL-2.0-or-later.

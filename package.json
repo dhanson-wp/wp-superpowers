@@ -2,6 +2,7 @@
   "name": "wp-superpowers",
   "version": "0.1.0",
   "description": "Add-on WordPress agent skill pack for custom editor, admin UI, plugin quality, block markup, Playground, and Interactivity API workflows.",
+  "license": "GPL-2.0-or-later",
   "type": "module",
   "scripts": {
     "validate": "node eval/harness/run.mjs",
