@@ -1,0 +1,18 @@
+{
+  "name": "Build a wp-admin DataViews screen",
+  "skills": ["wp-admin-dataviews-dataform", "wp-plugin-development", "wp-rest-api"],
+  "query": "Create a plugin admin page with a DataViews table and editable item details.",
+  "expected_behavior": [
+    "Register a normal wp-admin page in PHP",
+    "Enqueue assets only for the target hook suffix",
+    "Import from @wordpress/dataviews/wp",
+    "Keep REST schema, permissions, and sanitization server-led",
+    "Cover search, sorting, filtering, pagination, visible fields, row actions, and item details"
+  ],
+  "success_criteria": [
+    "Screen feels like wp-admin",
+    "DataViews styles are loaded",
+    "Interactions work without console errors",
+    "Save round-trips through REST and sanitization"
+  ]
+}

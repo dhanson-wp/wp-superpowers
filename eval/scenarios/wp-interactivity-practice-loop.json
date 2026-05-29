@@ -1,0 +1,19 @@
+{
+  "name": "Practice an Interactivity API block",
+  "skills": ["wp-interactivity-practice-loop", "wp-interactivity-api", "wp-playground-verification"],
+  "query": "Build a small Interactivity API accordion block and one useful variation.",
+  "expected_behavior": [
+    "Use the upstream Interactivity API skill as API authority when available",
+    "Keep markup server-rendered",
+    "Use meaningful data-wp directives",
+    "Scope state and actions",
+    "Verify frontend behavior in Playground or a real WordPress environment"
+  ],
+  "success_criteria": [
+    "Block registers and renders",
+    "Directives update expected state",
+    "Keyboard and pointer interactions work",
+    "Console is clean",
+    "Behavior survives reload"
+  ]
+}

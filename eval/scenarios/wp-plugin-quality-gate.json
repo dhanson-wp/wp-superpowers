@@ -1,0 +1,18 @@
+{
+  "name": "Review plugin quality before release",
+  "skills": ["wp-plugin-quality-gate", "wp-plugin-development"],
+  "query": "Review this plugin for release readiness.",
+  "expected_behavior": [
+    "Name the plugin contract before reviewing",
+    "Check activation, deactivation, and uninstall separately",
+    "Verify capabilities, intent, validation, sanitization, and escaping for write paths",
+    "Check REST schemas and permission callbacks when endpoints exist",
+    "Name human review areas"
+  ],
+  "success_criteria": [
+    "Durable data is not deleted on deactivation",
+    "Write paths are authorized and validated",
+    "Release artifact requirements are named",
+    "Residual risk is explicit"
+  ]
+}

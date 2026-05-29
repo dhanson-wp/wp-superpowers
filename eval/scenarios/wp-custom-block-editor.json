@@ -1,0 +1,20 @@
+{
+  "name": "Build a frontend custom block editor",
+  "skills": ["wp-custom-block-editor", "wp-block-development", "wp-rest-api", "wp-playground-verification"],
+  "query": "Build a frontend modal block editor that saves a short note as serialized block markup.",
+  "expected_behavior": [
+    "Identify the editor location, storage target, allowed blocks, media behavior, and permissions",
+    "Use BlockEditorProvider rather than EditorProvider for arbitrary block grammar",
+    "Start from a light composer surface unless the prompt asks for a full editor",
+    "Use parse() and serialize() from @wordpress/blocks",
+    "Configure editor settings, nonce middleware, and media behavior explicitly",
+    "Verify save and reload without block recovery"
+  ],
+  "success_criteria": [
+    "No fake toolbar controls",
+    "Allowed blocks are enforced",
+    "Slash insertion works",
+    "Serialized content persists and reloads",
+    "Console is clean"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "wp-superpowers",
+  "version": "0.1.0",
+  "description": "Add-on WordPress agent skill pack for custom editor, admin UI, plugin quality, block markup, Playground, and Interactivity API workflows.",
+  "type": "module",
+  "scripts": {
+    "validate": "node eval/harness/run.mjs",
+    "scaffold": "node shared/scripts/scaffold-skill.mjs",
+    "install-skills": "node shared/scripts/skillpack-install.mjs"
+  }
+}

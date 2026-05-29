@@ -1,0 +1,18 @@
+{
+  "name": "Generate valid block markup",
+  "skills": ["wp-block-markup"],
+  "query": "Generate a WordPress block pattern for a feature comparison section.",
+  "expected_behavior": [
+    "Prefer core blocks",
+    "Use valid block comments and JSON attributes",
+    "Avoid unavailable custom blocks",
+    "Use an available block-markup MCP or validator if the project provides one",
+    "Open or validate in WordPress when possible"
+  ],
+  "success_criteria": [
+    "Markup parses as blocks",
+    "No block recovery warnings",
+    "Frontend rendering matches intent",
+    "The content remains editor-editable"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Verify a practice plugin in Playground",
+  "skills": ["wp-playground-verification", "wp-playground"],
+  "query": "Run this WordPress practice plugin in Playground and verify the admin screen works.",
+  "expected_behavior": [
+    "Inspect for an existing blueprint or Playground config",
+    "Mount the plugin",
+    "Activate it",
+    "Open the target admin URL",
+    "Check console output",
+    "Exercise the workflow",
+    "Capture screenshots or reports when useful"
+  ],
+  "success_criteria": [
+    "Environment starts",
+    "Plugin activates",
+    "Target screen loads",
+    "Console is clean or warnings are documented",
+    "Interaction works"
+  ]
+}

@@ -1,0 +1,29 @@
+.DS_Store
+
+# Local dependencies and package manager output
+node_modules/
+vendor/
+composer.lock
+package-lock.json
+
+# Build and test output
+dist/
+build/
+coverage/
+tmp/
+.tmp/
+.cache/
+.phpunit.result.cache
+
+# Local environment
+.env
+.env.*
+*.log
+.wp-env/
+.playground/
+
+# Installed/generated skill copies in consuming projects
+.claude/skills/wp-*/
+.codex/skills/wp-*/
+.cursor/skills/wp-*/
+.github/skills/wp-*/

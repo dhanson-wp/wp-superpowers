@@ -1,0 +1,7 @@
+# License
+
+Unless a file says otherwise, code examples and documentation in this repository are licensed under GPL-2.0-or-later.
+
+This keeps WordPress-oriented examples compatible with normal WordPress plugin and theme expectations.
+
+Third-party WordPress, Gutenberg, or package source remains under its original license.
